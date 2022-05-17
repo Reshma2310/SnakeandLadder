@@ -9,9 +9,11 @@ namespace SnakeandLadder
     internal class SnakeAndLadder
     {
         int startPosition = 0, playerPosition = 0;
-        public void Position()
-        { 
-        Console.WriteLine("Initial position of player is " + playerPosition);
+        Random random = new Random();
+        public void diceRoll()
+        {
+            int diceNo = random.Next(1, 6);
+        Console.WriteLine("Dice value of player is " + diceNo);
         }
     }
 }
