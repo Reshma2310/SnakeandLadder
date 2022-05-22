@@ -8,69 +8,81 @@ namespace SnakeandLadder
 {
     internal class SnakeAndLadder
     {
-        public int diceNo, diceRollTimes = 0, playerPosition = 0;
+        public int diceNo, diceRollTimes = 0, player1Position = 0, player2Position = 0,player1,player2;
         const int noPlay = 0, snake = 1, ladder = 2;
         Random random = new Random();
-        public int DiceRoll()
-        {
-            diceNo = random.Next(1, 6);
-            diceRollTimes++;
-            return diceNo;
-        }
         public void DiceRollGame()
         {
-            while (playerPosition < 100)
+            while (player1Position != 100 && player2Position != 100)
             {
-                repeat:
-                int value = random.Next(3);
-                switch (value)
+                player1= random.Next(1, 7);
+                player2= random.Next(1, 7);                
+                diceRollTimes++;
+                repeat1:
+                int value1 = random.Next(0, 3);
+                switch (value1)
                 {
                     case noPlay:
-                        playerPosition += 0;
-                        //Console.WriteLine("Player got noPlay Option");
+                        player1Position += 0;                        
                         break;
                     case snake:
-                        playerPosition -= DiceRoll();
+                        player1Position -= player1;
                         break;
                     case ladder:
-                        playerPosition += DiceRoll();
+                        player1Position += player2;
                         break;
                     default:
                         break;
                 }
-                if (playerPosition < 0)
+                if (player1Position < 0)
+                    player1Position = 0;                
+                if (player1Position > 100)                
+                    player1Position -= player1;      
+                repeat2:
+                int value2 = random.Next(0, 3);
+                switch (value2)
                 {
-                    playerPosition = 0;
-                    //Console.WriteLine("Player reached {0} position with dice turns {1}",playerPosition,diceRollTimes);
+                    case noPlay:
+                        player2Position += 0;
+                        break;
+                    case snake:
+                        player2Position -= player1;
+                        break;
+                    case ladder:
+                        player2Position += player2;
+                        break;
+                    default:
+                        break;
                 }
-                if (playerPosition > 100)
+                if (player2Position < 0)
+                    player2Position = 0;
+                if (player2Position > 100)
+                    player2Position -= player2;
+
+                
+                if (value1 == ladder)
                 {
-                    playerPosition -= diceNo;
-                    //Console.WriteLine("Player rolls the dice {0} time to reach Position {1}\n", diceRollTimes, playerPosition);
-                    while (playerPosition < 100)
+                    if (player1Position != 100)
                     {
-                        if (DiceRoll() == (100 - playerPosition))
-                        {
-                            playerPosition = 100;
-                            //Console.WriteLine("Player Won the Game");
-                        }
-                        else
-                        {
-                            continue;
-                        }
+                        Console.WriteLine("Player 1 got ladder");
+                       goto repeat1;                        
                     }
                 }
-                if (value == ladder)
+                if (value2 == ladder)
                 {
-                    if (playerPosition != 100)
-                   {
-                        //Console.WriteLine("-----");
-                       //Console.WriteLine("Player got ladder, rolls the dice again");
-                       goto repeat;
-                   }
+                    if (player2Position != 100)
+                    {
+                        Console.WriteLine("Player 2 got ladder");
+                        goto repeat2;                        
+                    }
                 }
-                //Console.WriteLine("Player rolls the dice {0} time to reach Position {1}\n",diceRollTimes,playerPosition);
+                Console.WriteLine("Player 1 got {0} for rolling dice {1} time to get {2} position ", player1, diceRollTimes, player1Position);
+                Console.WriteLine("Player 2 got {0} for rolling dice {1} time to get {2} position ", player2, diceRollTimes, player2Position);
             }
+            if (player1Position == 100)
+                Console.WriteLine("Player 1 won the game");
+            else
+                Console.WriteLine("Player 2 won the game");
         }
     }
 }
